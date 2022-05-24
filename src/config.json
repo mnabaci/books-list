@@ -1,0 +1,17 @@
+{
+	"api": {
+		"baseUrl": "https://api-staging.mobideli.co.uk",
+		"endpoints": {
+			"auth": "api/v1/admin/authenticate"
+		}
+	},
+	"crawler": {
+		"baseUrl": "https://www.oldbookillustrations.com/wp-json/wp/v2",
+		"endpoints": {
+			"subjects": "subjects",
+			"illustrations": "illustrations",
+			"artists": "artists",
+			"titles": "titles"
+		}
+	}
+}

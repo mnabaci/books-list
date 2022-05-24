@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "Book's List",
+  "name": "Edenred Book's List",
   "icons": [
     {
       "src": "favicon.ico",

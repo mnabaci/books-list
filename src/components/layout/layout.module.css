@@ -1,0 +1,23 @@
+.wrapper {
+	justify-content: space-between;
+	padding-bottom: 120px;
+}
+
+.logOut {
+	cursor: pointer;
+	transition: all 0.2s ease-in;
+}
+
+.logOut:hover {
+	cursor: pointer;
+	color: white;
+}
+
+.body {
+	flex: 1;
+}
+
+.line {
+	border: solid 1px grey;
+	height: 100%;
+}

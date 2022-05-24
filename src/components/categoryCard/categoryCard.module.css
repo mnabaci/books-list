@@ -1,0 +1,28 @@
+.image {
+	object-fit: contain;
+	border: 2px solid;
+	padding: 4px;
+	width: 100%;
+	height: inherit;
+	overflow: hidden;
+}
+
+.card {
+	box-shadow: 0 0 10px #aaa;
+	margin: 4px;
+	padding: 10px 10px 10px 10px;
+	transition: all 0.2s ease-in;
+	min-height: 250px;
+	height: 250px;
+	overflow: hidden;
+}
+
+.card:hover {
+	margin: 0;
+	height: 258px;
+}
+
+.link {
+	width: 100%;
+	height: 100%;
+}
