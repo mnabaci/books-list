@@ -1,5 +1,4 @@
 import { useState } from "react";
-import "./App.css";
 import { useAppDispatch } from "./app/hooks";
 import AppRoutes from "./common/routing/router";
 import { loadAuthToken } from "./features/auth/authSlice";
