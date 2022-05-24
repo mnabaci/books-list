@@ -3,11 +3,11 @@ import CategoryCard from "../categoryCard/categoryCard";
 import categoriesPreviewStyles from "./categoriesPreview.module.css";
 export default function CategoriesPreview({ title, categoryCards }: Props) {
 	return (
-		<Card className={`${categoriesPreviewStyles.card}`}>
+		<Card color="light" className={`${categoriesPreviewStyles.card}`}>
 			<CardBody>
 				<CardTitle
-					tag="h5"
-					className={`pb-2 border-bottom border-secondary text-dark ${categoriesPreviewStyles.title}`}
+					tag="h4"
+					className={`pb-2 text-center text-uppercase border-bottom border-secondary text-dark ${categoriesPreviewStyles.title}`}
 				>
 					{title}
 				</CardTitle>

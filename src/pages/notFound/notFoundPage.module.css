@@ -1,0 +1,8 @@
+.container {
+	min-height: 70vh !important;
+	overflow: hidden;
+}
+
+.image {
+	max-width: 60%;
+}

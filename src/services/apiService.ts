@@ -24,7 +24,7 @@ export default class ApiService {
 				`${config.api.baseUrl}/${endpoint}`,
 				data
 			);
-			if (result.status == 200) return result.data;
+			if (result.status === 200) return result.data;
 			else return this.errorResponse<K>(ErrorMessages.UnexpectedError);
 		} catch (err) {
 			console.error(err);

@@ -57,41 +57,50 @@ export default class CrawlerService {
 		page?: number,
 		subjects?: string,
 		artists?: string,
-		titles?: string
+		titles?: string,
+		search?: string
 	): Promise<CrawlerResponse<Illustration[]>> => {
-		const { status, data, headers } = await axios.get<RawIllustration[]>(
-			`${config.crawler.baseUrl}/${
-				config.crawler.endpoints.illustrations
-			}?per_page=${count}${page ? `&page=${page}` : ""}${
-				subjects ? `&subjects=${subjects}` : ""
-			}${artists ? `&artists=${artists}` : ""}${
-				titles ? `&titles=${titles}` : ""
-			}&_embed`
-		);
+		try {
+			const { status, data, headers } = await axios.get<RawIllustration[]>(
+				`${config.crawler.baseUrl}/${
+					config.crawler.endpoints.illustrations
+				}?per_page=${count}${page ? `&page=${page}` : ""}${
+					subjects ? `&subjects=${subjects}` : ""
+				}${artists ? `&artists=${artists}` : ""}${
+					titles ? `&titles=${titles}` : ""
+				}${search ? `&search=${search}` : ""}&_embed`
+			);
 
-		if (status !== 200) return { status: status, total: 0, totalPages: 0 };
+			if (status !== 200) return { status: status, total: 0, totalPages: 0 };
+			let illustrations: Illustration[] = data.map(
+				(data) =>
+					({
+						id: data.id,
+						caption: data.meta.Caption[0],
+						content: data.content.rendered,
+						date: data.date,
+						author:
+							data._embedded.author && data._embedded.author.length > 0
+								? data._embedded.author[0].name
+								: "",
+						image: {
+							id: data._embedded["wp:featuredmedia"][0].id,
+							source: data._embedded["wp:featuredmedia"][0].source_url,
+							title: data._embedded["wp:featuredmedia"][0].title.rendered,
+						},
+						title: data.title.rendered,
+					} as Illustration)
+			);
 
-		let illustrations: Illustration[] = data.map(
-			(data) =>
-				({
-					id: data.id,
-					caption: data.meta.Caption[0],
-					content: data.content.rendered,
-					date: data.date,
-					image: {
-						id: data._embedded["wp:featuredmedia"][0].id,
-						source: data._embedded["wp:featuredmedia"][0].source_url,
-						title: data._embedded["wp:featuredmedia"][0].title.rendered,
-					},
-					title: data.title.rendered,
-				} as Illustration)
-		);
-
-		return {
-			total: Number(headers["x-wp-total"]),
-			totalPages: Number(headers["x-wp-totalpages"]),
-			data: illustrations,
-			status: status,
-		} as CrawlerResponse<Illustration[]>;
+			return {
+				total: Number(headers["x-wp-total"]),
+				totalPages: Number(headers["x-wp-totalpages"]),
+				data: illustrations,
+				status: status,
+			} as CrawlerResponse<Illustration[]>;
+		} catch (e) {
+			console.debug(e);
+			throw e;
+		}
 	};
 }

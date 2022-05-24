@@ -23,6 +23,7 @@ export interface Illustration {
 	caption: string;
 	image: Media;
 	content: string;
+	author: string;
 }
 
 export interface Media {
@@ -57,12 +58,18 @@ export interface RawMeta {
 
 export interface EmbeddedData {
 	"wp:featuredmedia": RawMedia[];
+	author: Author[];
 }
 
 export interface RawMedia {
 	id: number;
 	source_url: string;
 	title: RawContent;
+}
+
+export interface Author {
+	id: number;
+	name: string;
 }
 
 export interface Artist {

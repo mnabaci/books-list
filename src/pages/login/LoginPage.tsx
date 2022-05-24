@@ -1,3 +1,5 @@
+import { faRightToBracket } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 import {
@@ -13,6 +15,7 @@ import {
 import { useAppDispatch } from "../../app/hooks";
 import { Routes } from "../../common/constants/routes";
 import { Status } from "../../common/constants/status";
+import Alert from "../../components/alert/alert";
 import Loading from "../../components/loading/loading";
 import { isLoggedIn, logIn } from "../../features/auth/authSlice";
 import ApiService from "../../services/apiService";
@@ -21,6 +24,7 @@ import loginPageStyles from "./loginPage.module.css";
 export default function LoginPage() {
 	const [username, setUsername] = useState("");
 	const [password, setPassword] = useState("");
+	const [alert, setAlert] = useState("");
 	const [status, setStatus] = useState(Status.Idle);
 
 	const dispatch = useAppDispatch();
@@ -43,7 +47,7 @@ export default function LoginPage() {
 			navigate(Routes.Home);
 		} else {
 			setStatus(Status.Error);
-			alert(message);
+			setAlert(message);
 		}
 	};
 
@@ -98,11 +102,19 @@ export default function LoginPage() {
 									}}
 								/>
 							</FormGroup>
-							<Button color="warning">Login</Button>
+							<Button color="warning">
+								<FontAwesomeIcon className="me-1" icon={faRightToBracket} />
+								Login
+							</Button>
 						</Form>
 					</Col>
 				</Row>
 			)}
+			<Alert
+				message={alert}
+				isOpen={alert !== undefined && alert !== ""}
+				toggle={() => setAlert("")}
+			/>
 		</Container>
 	);
 }

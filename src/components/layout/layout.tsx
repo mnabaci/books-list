@@ -1,12 +1,9 @@
 import layoutStyles from "./layout.module.css";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
 	Col,
 	Collapse,
 	Container,
-	DropdownItem,
-	DropdownMenu,
-	DropdownToggle,
 	Nav,
 	Navbar,
 	NavbarBrand,
@@ -15,19 +12,25 @@ import {
 	NavItem,
 	NavLink,
 	Row,
-	UncontrolledDropdown,
 } from "reactstrap";
 import { useAppDispatch } from "../../app/hooks";
-import styles from "../../common/styles/styles.module.css";
 import { isLoggedIn, logOut } from "../../features/auth/authSlice";
 import { Routes } from "../../common/constants/routes";
 import { useState } from "react";
+import styles from "../../common/styles/styles.module.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+	faRightFromBracket,
+	faUpRightFromSquare,
+} from "@fortawesome/free-solid-svg-icons";
 
 export default function Layout({ children }: { children: JSX.Element }) {
 	const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-	const dispatch = useAppDispatch();
 	let navigate = useNavigate();
+	let location = useLocation();
+
+	const dispatch = useAppDispatch();
 	const loggedIn = dispatch(isLoggedIn());
 
 	const onLogOut = () => {
@@ -46,17 +49,29 @@ export default function Layout({ children }: { children: JSX.Element }) {
 							<Collapse isOpen={isMenuOpen} navbar>
 								<Nav className="me-auto" navbar>
 									<NavItem>
-										<NavLink tag={Link} to={Routes.Home}>
+										<NavLink
+											active={location.pathname === Routes.Home}
+											tag={Link}
+											to={Routes.Home}
+										>
 											Home
 										</NavLink>
 									</NavItem>
 									<NavItem>
-										<NavLink tag={Link} to={Routes.Illustrations}>
+										<NavLink
+											active={location.pathname === Routes.Illustrations}
+											tag={Link}
+											to={Routes.Illustrations}
+										>
 											Illustrations
 										</NavLink>
 									</NavItem>
 								</Nav>
-								<NavbarText className={layoutStyles.logOut} onClick={onLogOut}>
+								<NavbarText
+									className={`${layoutStyles.logOut}`}
+									onClick={onLogOut}
+								>
+									<FontAwesomeIcon icon={faRightFromBracket} className="me-1" />
 									Log out
 								</NavbarText>
 							</Collapse>
@@ -84,7 +99,8 @@ export default function Layout({ children }: { children: JSX.Element }) {
 											target={"_blank"}
 											href="https://github.com/mnabaci"
 										>
-											Github
+											<FontAwesomeIcon size="xs" icon={faUpRightFromSquare} />{" "}
+											GitHub
 										</NavLink>
 									</NavItem>
 								</Col>

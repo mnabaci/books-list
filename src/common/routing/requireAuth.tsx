@@ -1,6 +1,5 @@
-import React from "react";
 import { Navigate, useLocation } from "react-router-dom";
-import { useAppDispatch, useAppSelector } from "../../app/hooks";
+import { useAppDispatch } from "../../app/hooks";
 import { isLoggedIn } from "../../features/auth/authSlice";
 import { Routes } from "../constants/routes";
 
