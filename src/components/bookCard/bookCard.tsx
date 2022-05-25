@@ -27,11 +27,11 @@ export default function BookCard({
 	return (
 		<>
 			<Card
-				className={`${bookCardStyles.card}`}
+				className={`my-3 mx-2 ${bookCardStyles.card}`}
 				onClick={() => setShowModal(true)}
 			>
 				<img
-					className={`rounded border-warning ${bookCardStyles.image}`}
+					className={`rounded border-warning ${bookCardStyles.image} ${bookCardStyles.cardImage}`}
 					alt={title}
 					src={imgSrc}
 				/>
@@ -74,7 +74,7 @@ export default function BookCard({
 						alt={title}
 						src={imgSrc}
 						width="100%"
-						className={`rounded border-warning ${bookCardStyles.image}`}
+						className={`rounded border-warning ${bookCardStyles.image} ${bookCardStyles.modalImage}`}
 					/>
 					<Container className="mt-2">
 						{(date || author) && (

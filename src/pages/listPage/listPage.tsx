@@ -28,7 +28,7 @@ export default function ListPage({
 		for (let i = 0; i < items.length; i += chunkSize) {
 			const chunk = items.slice(i, i + chunkSize);
 			rows.push(
-				<Row key={i} className="my-3">
+				<Row key={i}>
 					{chunk.map((data, j) => (
 						<Col md="4" key={j}>
 							{renderCard(data)}
