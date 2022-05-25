@@ -23,64 +23,71 @@ export default function IllustrationsPage() {
 
 	useEffect(() => {
 		if (status !== Status.Idle) return;
-		loadIllustrations();
+		loadIllustrations().catch((e) => {
+			console.error(e);
+			setStatus(Status.Error);
+			navigate(Routes.NotFound);
+		});
 	});
 
-	const loadIllustrations = () => {
+	const loadIllustrations = async (): Promise<void> => {
 		setStatus(Status.Pending);
+
 		const { artist, title, subject, page, search } = getSearchParams();
+
 		setCurrentPage(page);
 		setSearchText(search ?? "");
-		CrawlerService.getIllustrations(12, page, subject, artist, title, search)
-			.then((data) => {
-				if (data.status !== 200) {
-					setAlert(ErrorMessages.UnexpectedError);
-					return;
-				}
 
-				if (!data.data) return;
+		const { status, data, totalPages } = await CrawlerService.getIllustrations(
+			12,
+			page,
+			subject,
+			artist,
+			title,
+			search
+		);
 
-				if (subject) loadSubject(subject);
-				else if (artist) loadArtist(artist);
-				else if (title) loadTitle(title);
-				else setStatus(Status.Done);
-				setIllustrations(data.data);
-				setTotalPages(data.totalPages);
-			})
-			.catch((e) => {
-				console.debug(e);
-				navigate(Routes.NotFound, { replace: true });
-			});
+		if (status !== 200) {
+			setStatus(Status.Error);
+			setAlert(ErrorMessages.UnexpectedError);
+			return;
+		}
+
+		if (!data) {
+			setStatus(Status.Done);
+			return;
+		}
+
+		try {
+			if (subject) await loadSubject(subject);
+			else if (artist) await loadArtist(artist);
+			else if (title) await loadTitle(title);
+		} catch (e) {
+			console.error(e);
+		}
+
+		setStatus(Status.Done);
+		setIllustrations(data);
+		setTotalPages(totalPages);
 	};
 
-	const loadArtist = (artist: string) => {
-		CrawlerService.getArtist(artist)
-			.then((a) => {
-				if (a.status !== 200 || !a.data) return;
-				setTitle(a.data.name);
-				setStatus(Status.Done);
-			})
-			.catch(() => setStatus(Status.Done));
+	const loadArtist = async (artist: string): Promise<void> => {
+		const { status, data } = await CrawlerService.getArtist(artist);
+
+		if (status !== 200 || !data) return;
+		setTitle(data.name);
 	};
 
-	const loadTitle = (title: string) => {
-		CrawlerService.getTitle(title)
-			.then((t) => {
-				if (t.status !== 200 || !t.data) return;
-				setTitle(t.data.name);
-				setStatus(Status.Done);
-			})
-			.catch(() => setStatus(Status.Done));
+	const loadTitle = async (title: string): Promise<void> => {
+		const { status, data } = await CrawlerService.getTitle(title);
+		if (status !== 200 || !data) return;
+		setTitle(data.name);
 	};
 
-	const loadSubject = (subject: string) => {
-		CrawlerService.getSubject(subject)
-			.then((s) => {
-				if (s.status !== 200 || !s.data) return;
-				setTitle(s.data.name);
-				setStatus(Status.Done);
-			})
-			.catch(() => setStatus(Status.Done));
+	const loadSubject = async (subject: string): Promise<void> => {
+		const { status, data } = await CrawlerService.getSubject(subject);
+		if (status !== 200 || !data) return;
+		setTitle(data.name);
 	};
 
 	const changePage = (page: number, searchParam?: string) => {
@@ -93,13 +100,27 @@ export default function IllustrationsPage() {
 			return;
 
 		setStatus(Status.Idle);
+
+		let query = buildQueryString(page, artist, title, subject, searchParam);
+
+		navigate(`${location.pathname}${query}`);
+	};
+
+	const buildQueryString = (
+		page: number,
+		artist?: string,
+		title?: string,
+		subject?: string,
+		searchParam?: string
+	) => {
 		let query = "";
 		if (artist) query = `artist=${artist}`;
 		if (title) query = `${query && `${query}&`}title=${title}`;
 		if (subject) query = `${query && `${query}&`}subject=${subject}`;
 		if (searchParam) query = `${query && `${query}&`}search=${searchParam}`;
 		if (page > 1) query = `${query && `${query}&`}page=${page}`;
-		navigate(`${location.pathname}${query && "?"}${query}`);
+
+		return query ? `?${query}` : query;
 	};
 
 	const getSearchParams = () => {

@@ -22,9 +22,9 @@ export default function ListPage({
 }: Props) {
 	const [searchText, setSearchText] = useState("");
 
-	const chunkSize = 3;
 	const rows = [] as JSX.Element[];
 	if (items) {
+		const chunkSize = 3;
 		for (let i = 0; i < items.length; i += chunkSize) {
 			const chunk = items.slice(i, i + chunkSize);
 			rows.push(

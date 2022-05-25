@@ -9,6 +9,8 @@ export default function PageNavigation({
 	const paginationItems = [];
 	let fisrtPage: number = 1,
 		lastPage: number = totalPages >= 5 ? 5 : totalPages;
+
+	/* Calculate the first and last pages numbers to display */
 	if (currentPage > 3 && totalPages > 5) {
 		let pageDiff = totalPages - currentPage;
 		fisrtPage =
@@ -16,6 +18,7 @@ export default function PageNavigation({
 		lastPage = pageDiff > 2 ? currentPage + 2 : totalPages;
 	}
 
+	/* Create the PaginationItems */
 	for (let i = fisrtPage; i <= lastPage; i++) {
 		paginationItems.push(
 			<PaginationItem
@@ -29,6 +32,7 @@ export default function PageNavigation({
 			</PaginationItem>
 		);
 	}
+
 	return (
 		<Pagination
 			className={`d-flex justify-content-center pt-4 ${pageNavigationStyles.pagination}`}
